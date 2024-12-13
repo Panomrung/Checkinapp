@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ลงเวลางาน</title>
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f3e9dc;
+            background-image: url('https://www.transparenttextures.com/patterns/wood-pattern.png');
+        }
+        .container {
+            text-align: center;
+            background: #ffffff;
+            border: 1px solid #d2b48c;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 400px;
+        }
+        .time {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #8b5e3c;
+        }
+        .label {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: #6d4c41;
+        }
+        .input-field {
+            width: 100%;
+            padding: 10px;
+            font-size: 1rem;
+            margin-bottom: 20px;
+            border: 1px solid #d2b48c;
+            border-radius: 5px;
+            background-color: #fff8e1;
+        }
+        .button {
+            width: 100%;
+            padding: 10px;
+            font-size: 1rem;
+            margin-bottom: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .button.primary {
+            background-color: #8b5e3c;
+            color: white;
+        }
+        .button.secondary {
+            background-color: #fff3e0;
+            color: #6d4c41;
+        }
+        .button.primary:hover {
+            background-color: #6d4c41;
+        }
+        .button.secondary:hover {
+            background-color: #ffe0b2;
+        }
+    </style>
+    <script>
+        function updateTime() {
+            const timeElements = document.querySelectorAll('.time');
+            const now = new Date();
+            const options = { timeZone: 'Asia/Bangkok', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
+            const formattedTime = new Intl.DateTimeFormat('th-TH', options).format(now);
+            timeElements.forEach(el => el.textContent = formattedTime);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            updateTime();
+            setInterval(updateTime, 1000);
+
+            const form = document.getElementById('time-form');
+            form.addEventListener('submit', (event) => {
+                event.preventDefault();
+                const employeeId = document.getElementById('employee-id').value;
+                if (employeeId) {
+                    document.querySelector('.input-section').style.display = 'none';
+                    document.querySelector('.summary-section').style.display = 'block';
+                    document.getElementById('employee-id-summary').textContent = employeeId;
+                }
+            });
+
+            const backButtons = document.querySelectorAll('.back-button');
+            backButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    document.querySelector('.input-section').style.display = 'block';
+                    document.querySelector('.summary-section').style.display = 'none';
+                    document.getElementById('employee-id').value = '';
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <!-- Input Section -->
+        <div class="input-section">
+            <div class="time">--:-- --</div>
+            <form id="time-form">
+                <div class="label">กรอกรหัสพนักงาน</div>
+                <input type="text" id="employee-id" class="input-field" placeholder="รหัสพนักงาน" required>
+                <button type="submit" class="button primary">ลงเวลา</button>
+                <button type="button" class="button secondary back-button">ย้อนกลับ</button>
+            </form>
+        </div>
+
+        <!-- Summary Section -->
+        <div class="summary-section" style="display: none;">
+            <div class="time">--:-- --</div>
+            <div class="label">ยืนยันการลงเวลา</div>
+            <div id="employee-id-summary" class="label" style="font-weight: bold; font-size: 1.5rem;"></div>
+            <button type="button" class="button secondary back-button">ย้อนกลับ</button>
+        </div>
+    </div>
+</body>
+</html>
